@@ -1,1 +1,192 @@
-/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+
+// Include _theme-colors.scss as angular material theme
+
+// Variables
+$primary: #14c6a4;
+// $accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+// $warn: mat.define-palette(mat.$red-palette);
+// $theme: mat.define-light-theme(
+//   (
+//     color: (
+//       primary: $primary,
+//       accent: $accent,
+//       warn: $warn,
+//     ),
+//     typography:
+//       mat.define-typography-config(
+//         (
+//           font-family: 'Roboto, "Helvetica Neue", sans-serif',
+//           display-4: mat.define-typography-level(112px, 112px, 300),
+//           display-3: mat.define-typography-level(56px, 56px, 400),
+//           display-2: mat.define-typography-level(45px, 48px, 400),
+//           display-1: mat.define-typography-level(34px, 40px, 400),
+//           headline: mat.define-typography-level(24px, 32px, 400),
+//           title: mat.define-typography-level(20px, 32px, 500),
+//           subheading-2: mat.define-typography-level(16px, 28px, 400),
+//           subheading-1: mat.define-typography-level(15px, 24px, 400),
+//           body-2: mat.define-typography-level(14px, 24px, 500),
+//           body-1: mat.define-typography-level(14px, 20px, 400),
+//           caption: mat.define-typography-level(12px, 20px, 400),
+//           button: mat.define-typography-level(14px, 14px, 500, $letter-spacing: 1.25px),
+//         )
+//       ),
+//   )
+// );
+
+// *****************************************************************************
+// Angular Material Density
+// *****************************************************************************
+mat-form-field {
+  @include mat.form-field-density(-5);
+}
+table {
+  @include mat.table-density(-2);
+}
+list {
+  @include mat.list-density(-2);
+}
+mat-dialog {
+  @include mat.dialog-density(-2);
+}
+menu {
+  @include mat.menu-density(-2);
+}
+select {
+  @include mat.select-density(-4);
+}
+
+// **************************************************************************
+// End Angular Material Density
+// **************************************************************************
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  font-size: 14px;
+}
+.mat-typography {
+  font: 400 14px Roboto, 'Helvetica Neue', sans-serif;
+  // color: #5d5d5d !important;
+}
+
+// **************************************************************
+//  FORMS
+// **************************************************************
+
+.mdc-text-field--filled {
+  background-color: transparent;
+}
+.mat-mdc-text-field-wrapper {
+  background-color: rgba(216, 216, 216, 0.3);
+}
+.mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  background-color: rgba(216, 216, 216, 0.3) !important;
+}
+
+// change placeholder color
+.mdc-text-field__input::placeholder {
+  color: #7b7b7b !important;
+  // font-size: 12px !important;
+  // font-weight: 400 !important;
+  // line-height: 22px !important;
+  // letter-spacing: 0.03em !important;
+  // word-wrap: break-word !important;
+  // opacity: 1 !important; /* Firefox */
+}
+// **************************************************************
+// ** End FORMS **
+// **************************************************************
+
+// **************************************************************************
+// **  MATERIAL TEXT FIELD **
+// **************************************************************************
+
+.mat-mdc-form-field {
+  width: 100%;
+  margin-top: 5px;
+}
+// este no funciona hay que ponerlo en los estilos de cada componente
+.mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  // background-color: #D6D6D6 ;
+  background-color: transparent !important;
+  border-radius: 20px;
+  border: #d7d7d7c9 2px solid;
+  // height: 46px;
+  flex: auto;
+}
+
+.mdc-text-field--filled.mdc-text-field--invalid:not(.mdc-text-field--disabled)
+  .mdc-line-ripple::before {
+  border-bottom-color: transparent !important;
+}
+.mdc-text-field--filled.mdc-text-field--valid:not(.mdc-text-field--disabled)
+  .mdc-line-ripple::before {
+  border-bottom-color: transparent !important;
+}
+.mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-line-ripple::before {
+  border-bottom-color: transparent !important;
+}
+.mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-line-ripple::after {
+  border-bottom-color: transparent !important;
+}
+
+.mat-mdc-form-field-error {
+  font-size: 12px;
+}
+
+.mdc-text-field--outlined .mat-mdc-form-field-infix,
+.mdc-text-field--no-label .mat-mdc-form-field-infix {
+  padding-top: 13px;
+  /* padding-top: var(--mat-form-field-container-vertical-padding, 16px); */
+  /* padding-bottom: var(--mat-form-field-container-vertical-padding, 16px); */
+}
+
+// **************************************************************
+//  BUTTONS
+// **************************************************************
+
+.mat-mdc-raised-button {
+  color: white !important;
+  background-color: $primary !important;
+  font-size: 16px !important;
+}
+// my-raised-button {
+//   // word-wrap: break-word;
+//   padding: 10px 20px !important;
+// }
+
+// .my-custom-input ::placeholder {
+//   color: blue !important;
+//   opacity: 1; /* For Firefox compatibility */
+// }
+
+.mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-text-field__input {
+  color: #2e2e2e !important;
+  /* caret-color: var(--mat-form-field-filled-caret-color, var(--mat-sys-primary)); */
+}
+
+// mat label color
+// .form-field-label {
+//   color: #747474 !important;
+//   font-size: 16px !important;
+//   font-weight: 400 !important;
+// }
+
+.mat-label-form {
+  color: #535353;
+  font-size: 16px;
+  // font-weight: 800;
+  line-height: 22px;
+  // letter-spacing: 0.03em;
+  // word-wrap: break-word;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: #fff;
+}

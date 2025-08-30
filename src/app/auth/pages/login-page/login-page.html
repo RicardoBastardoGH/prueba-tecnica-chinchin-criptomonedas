@@ -1,0 +1,137 @@
+<!-- <body> -->
+<!-- <header class="masthead"> -->
+<div class="container h-100">
+  <div class="row h-100 justify-content-center align-items-center">
+    <div class="col-xl-4 col-lg-6 col-md-7 col-sm-9">
+      <div class="card container border-0 rounded-3">
+        <img
+          src="/assets/images/chinchin-logo.png"
+          class="my__img img-fluid mx-auto d-block mb-4 mt-4"
+          alt="..."
+          style="width: 350px"
+        />
+        <h6 class="text-center fw-light fs-4">¡Bienvenido!</h6>
+
+        <div class="card-body p-2 p-sm-3">
+          <div class="">
+            <form
+              class=""
+              method="post"
+              id="myForm"
+              name="myForm"
+              [formGroup]="myForm"
+              (submit)="login()"
+            >
+              <div class="col-12 mt-2">
+                <mat-label class="mat-label-form">Correo: <small>*</small></mat-label>
+                <mat-form-field class="d-block input-field" appearance="fill">
+                  <!-- <div matTextPrefix style="height: 30px">
+                    <img
+                      class="form-icon-prefix"
+                      src="/img/user-form-icon.png"
+                      alt=""
+                      style="width: 60%"
+                    />
+                    &nbsp;
+                  </div> -->
+                  <input
+                    class="my-custom-input"
+                    matInput
+                    formControlName="email"
+                    name="email"
+                    type="email"
+                    placeholder="Introduzca su correo"
+                  />
+                  <!-- mat-error -->
+                  @if (fieldHasError('email')) {
+                  <mat-error class="error-message">Debe ingresar un correo válido</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+
+              <div class="col-12 mt-2">
+                <mat-label class="mat-label-form">Contraseña: <small>*</small></mat-label>
+                <mat-form-field class="d-block input-field" appearance="fill">
+                  <div matTextPrefix style="height: 30px">
+                    <img
+                      class="form-icon-prefix"
+                      src="/img/password-form-icon.png"
+                      alt=""
+                      style="width: 60%"
+                    />
+                    &nbsp;
+                  </div>
+                  <input
+                    class="my-custom-input"
+                    matInput
+                    formControlName="password"
+                    name="password"
+                    placeholder="Introduzca su contraseña"
+                  />
+                  @if (fieldHasError('password')) {
+                  <mat-error class="error-message">Debe ingresar al menos 3 caracteres</mat-error>
+                  }
+                  <!-- [type]="hide() ? 'password' : 'text'"  -->
+                  <!-- <button type="button" mat-icon-button matSuffix> -->
+                  <!-- [attr.aria-label]="'Hide password'" -->
+                  <!-- [attr.aria-pressed]="hide()" -->
+                  <!-- (click)="clickEvent($event)" -->
+                  <!-- <mat-icon class="password-hide-icon" >{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon> -->
+                  <!-- </button> -->
+                  <!-- <mat-error  *ngIf="fieldHasError('password')">Debe ingresar una contraseña</mat-error> -->
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-12 text-end">
+                <!-- appDebounceClick (debounceClick)="login()" -->
+                <button
+                  mat-raised-button
+                  color="primary"
+                  type="submit"
+                  class="my-raised-button mt-3"
+                >
+                  Entrar
+                </button>
+                <!-- <button  type="button" [disabled]="!myForm.valid" (click)="enviar()" class="btn bg-gradient-primary mt-3 mb-0 text-white">Enviar</button> -->
+              </div>
+            </form>
+          </div>
+
+          <!-- <form>
+                <div class="form-floating mb-3">
+                  <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                  <label for="floatingInput">Email address</label>
+                </div>
+                <div class="form-floating mb-3">
+                  <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                  <label for="floatingPassword">Password</label>
+                </div>
+
+                <div class="form-check mb-3">
+                  <input class="form-check-input" type="checkbox" value="" id="rememberPasswordCheck">
+                  <label class="form-check-label" for="rememberPasswordCheck">
+                    Remember password
+                  </label>
+                </div>
+                <div class="d-grid">
+                  <button class="btn btn-primary btn-login text-uppercase fw-bold" type="submit">Sign
+                    in</button>
+                </div>
+                <hr class="my-4">
+                <div class="d-grid mb-2">
+                  <button class="btn btn-google btn-login text-uppercase fw-bold" type="submit">
+                    <i class="fab fa-google me-2"></i> Sign in with Google
+                  </button>
+                </div>
+                <div class="d-grid">
+                  <button class="btn btn-facebook btn-login text-uppercase fw-bold" type="submit">
+                    <i class="fab fa-facebook-f me-2"></i> Sign in with Facebook
+                  </button>
+                </div>
+              </form> -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <app-footer></app-footer> -->
+</div>
