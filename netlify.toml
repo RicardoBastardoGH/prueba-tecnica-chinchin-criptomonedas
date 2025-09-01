@@ -1,0 +1,7 @@
+[build]
+publish = "dist/prueba-tecnica-chinchin-criptomonedas/browser"
+command = "ng build"
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
