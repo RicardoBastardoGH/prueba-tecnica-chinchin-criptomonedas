@@ -30,8 +30,9 @@
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "@angular/material/prebuilt-themes/azure-blue.css",
-              "src/_theme-colors.scss",
-              "src/styles.scss"
+              "node_modules/animate.css/animate.min.css",
+              "src/styles.scss",
+              "src/_theme-colors.scss"
             ],
             "scripts": [
               "node_modules/@popperjs/core/dist/umd/popper.min.js",

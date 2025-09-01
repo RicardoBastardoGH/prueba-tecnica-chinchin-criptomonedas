@@ -1,0 +1,30 @@
+
+Autenticación de usuario:
+  * Permitir el registro y la autenticación de usuarios mediante correo electrónico/usuario y
+  contraseña, (se valorará si usa otro medio de autentificación).
+  * Implementar el almacenamiento seguro de tokens de autenticación.
+  * Si los datos ingresados son correctos deberá crear una sesión la cual lo enviará al home.
+  * Permitir el cierre de sesión.
+Consulta de datos:
+  * Mostrar una lista/tabla actualizada de criptomonedas disponibles para su intercambio y
+  actualizarlas cada 30 segundos.
+  * Mostrar una lista/tabla actualizada de criptomonedas con el saldo del usuario (data estática).
+  * Permitir al usuario filtrar y ordenar la lista de criptomonedas por diferentes criterios (nombre,
+  precio, etc.) o utilizar los filtros disponibles por la API.
+  * Mostrar información detallada sobre cada criptomoneda, a manera de detalle informativo,
+  incluyendo gráficos de precios históricos, volumen de negociación o información relevante.
+
+Intercambio de criptomonedas:
+  * Permitir al usuario realizar un intercambio de dos criptomonedas.
+  * Mostrar el tipo de cambio o tasa actual entre las criptomonedas
+  seleccionadas durante una cantidad de tiempo limitada.
+  *Mostrar el saldo disponible del usuario en cada una de las criptomonedas a intercambiar.
+  * Permitir al usuario ingresar la cantidad de una criptomoneda que desea intercambiar y calcular
+  automáticamente la cantidad de la otra criptomoneda que recibirá.
+  * Ejecutar la orden de intercambio y actualizar el saldo del usuario en consecuencia.
+  Funcionalidades opcionales:
+  * Mostrar un historial de todas las transacciones realizadas por el usuario.
+  * Incluir información sobre la fecha y hora de la transacción, las criptomonedas involucradas, la
+  cantidad intercambiada y el tipo de cambio.
+  * Sección de configuración donde se puedan ocultar/mostrar las vistas explicadas anteriormente y
+  se refresque a tiempo real.

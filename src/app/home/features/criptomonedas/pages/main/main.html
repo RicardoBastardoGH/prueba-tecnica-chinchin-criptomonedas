@@ -1,0 +1,509 @@
+<div class="dashboard-container">
+  <div class="row">
+    <div class="col-lg-8 col-sm-12">
+      <div class="row">
+        <div class="col-12">
+          <!-- Header -->
+          <div class="dashboard-header">
+            <h1>Dashboard</h1>
+            <div class="header-actions">
+              <!-- <button (click)="refreshData()" [disabled]="loading" class="refresh-btn">
+            {{ loading ? 'actualizando...' : 'Actualizar' }}
+          </button> -->
+              <span class="last-updated"
+                >Actualizado: {{ dashboardData ? (currentTime | date : 'medium') : '' }}</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Loading State -->
+        <div *ngIf="loading" class="loading">
+          <div class="spinner"></div>
+          <p>Loading dashboard data...</p>
+        </div>
+
+        <!-- Error State -->
+        <div *ngIf="error && !loading" class="error">
+          <p>Error: {{ error }}</p>
+          <button (click)="refreshData()" class="retry-btn">Try Again</button>
+        </div>
+
+        @if(dashboardData && portfolioSummary && !loading){
+        <div class="col-md-6">
+          <div class="summary-card balance-card">
+            <div class="card-icon">💰</div>
+            <div class="card-content">
+              <h3>Saldo total</h3>
+              <p class="card-value">{{ formatPrice(dashboardData!.totalBalance) }}</p>
+              <span class="card-change positive">+2.1% today</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="summary-card balance-card">
+            <div class="card-icon">📊</div>
+            <div class="card-content">
+              <h3>Valor del portafolio</h3>
+              <p class="card-value">{{ formatPrice(portfolioSummary!.totalValue) }}</p>
+              <span [class]="'card-change ' + getChangeClass(portfolioSummary!.totalChangePercent)">
+                {{ formatPercentage(portfolioSummary!.totalChangePercent) }} 24h
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <div class="dashboard-tabs">
+            <button
+              *ngFor="let tab of ['Descripción general', 'portfolio', 'transacciones']"
+              [class.active]="activeSection === tab"
+              (click)="changeSection(tab)"
+              class="tab-btn"
+            >
+              {{ tab | titlecase }}
+            </button>
+          </div>
+        </div>
+        <div class="col-12">
+          <!-- Main Content -->
+          <div *ngIf="dashboardData && portfolioSummary && !loading" class="dashboard-content">
+            <div class="summary-grid">
+              <!-- <div class="summary-card balance-card">
+        <div class="card-icon">💰</div>
+        <div class="card-content">
+          <h3>Saldo total</h3>
+          <p class="card-value">{{ formatPrice(dashboardData.totalBalance) }}</p>
+          <span class="card-change positive">+2.1% today</span>
+        </div>
+      </div> -->
+
+              <!-- <div class="summary-card portfolio-card">
+        <div class="card-icon">📊</div>
+        <div class="card-content">
+          <h3>Valor del portafolio</h3>
+          <p class="card-value">{{ formatPrice(portfolioSummary.totalValue) }}</p>
+          <span [class]="'card-change ' + getChangeClass(portfolioSummary.totalChangePercent)">
+            {{ formatPercentage(portfolioSummary.totalChangePercent) }} 24h
+          </span>
+        </div>
+      </div> -->
+
+              <!-- <div class="summary-card market-card">
+        <div class="card-icon">🌐</div>
+        <div class="card-content">
+          <h3>Capitalización de mercado</h3>
+          <p class="card-value">{{ formatPrice(dashboardData.marketDescripción general.totalMarketCap) }}</p>
+          <span
+            [class]="'card-change ' + getChangeClass(dashboardData.marketDescripción general.marketCapChange)"
+          >
+            {{ formatPercentage(dashboardData.marketDescripción general.marketCapChange) }} 24h
+          </span>
+        </div>
+      </div> -->
+
+              <!-- <div class="summary-card volume-card">
+        <div class="card-icon">📈</div>
+        <div class="card-content">
+          <h3>24h Volume</h3>
+          <p class="card-value">{{ formatPrice(dashboardData.marketDescripción general.totalVolume) }}</p>
+          <span class="card-change">Global</span>
+        </div>
+      </div>
+    </div> -->
+
+              <!-- Navigation Tabs -->
+              <!-- <div class="dashboard-tabs">
+        <button
+          *ngFor="let tab of ['Descripción general', 'portfolio', 'market', 'transactions']"
+          [class.active]="activeSection === tab"
+          (click)="changeSection(tab)"
+          class="tab-btn"
+        >
+          {{ tab | titlecase }}
+        </button>
+      </div> -->
+
+              <!-- Descripción general Section -->
+              <div *ngIf="activeSection === 'Descripción general'" class="tab-content">
+                <div class="overview-grid">
+                  <!-- Portfolio Performance -->
+                  <div class="card performance-card">
+                    <h3>Rendimiento del Portfolio</h3>
+                    <div class="performance-stats">
+                      <div class="performance-item">
+                        <span class="label">Valor total</span>
+                        <span class="value">{{ formatPrice(portfolioSummary.totalValue) }}</span>
+                      </div>
+                      <div class="performance-item">
+                        <span class="label">Diferencia 24h </span>
+                        <span
+                          [class]="'value ' + getChangeClass(portfolioSummary.totalChangePercent)"
+                        >
+                          {{ formatPrice(portfolioSummary.totalChange) }} ({{
+                            formatPercentage(portfolioSummary.totalChangePercent)
+                          }})
+                        </span>
+                      </div>
+                      <div class="performance-item">
+                        <span class="label">Mejor desempeño</span>
+                        <span class="value positive">
+                          {{ portfolioSummary.bestPerformer.symbol.toUpperCase() }}
+                          {{ formatPercentage(portfolioSummary.bestPerformer.change24h) }}
+                        </span>
+                      </div>
+                      <div class="performance-item">
+                        <span class="label">Peor desempeño</span>
+                        <span class="value negative">
+                          {{ portfolioSummary.worstPerformer.symbol.toUpperCase() }}
+                          {{ formatPercentage(portfolioSummary.worstPerformer.change24h) }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Market Overview -->
+                  <!-- <div class="card market-overview-card">
+            <h3>Market Overview</h3>
+            <div class="market-stats">
+              <div class="market-item">
+                <span class="label">BTC Dominance</span>
+                <span class="value"
+                  >{{ dashboardData.marketOverview.bitcoinDominance.toFixed(2) }}%</span
+                >
+              </div>
+              <div class="market-item">
+                <span class="label">Total Cryptocurrencies</span>
+                <span class="value">12,000+</span>
+              </div>
+              <div class="market-item">
+                <span class="label">24h Volume</span>
+                <span class="value">{{
+                  formatPrice(dashboardData.marketOverview.totalVolume)
+                }}</span>
+              </div>
+              <div class="market-item">
+                <span class="label">Market Sentiment</span>
+                <span class="value positive">Bullish</span>
+              </div>
+            </div>
+          </div> -->
+
+                  <!-- Quick Actions -->
+                  <!-- <div class="card actions-card">
+            <h3>Quick Actions</h3>
+            <div class="action-buttons">
+              <button class="action-btn buy">Buy Crypto</button>
+              <button class="action-btn sell">Sell Crypto</button>
+              <button class="action-btn swap">Swap Assets</button>
+              <button class="action-btn deposit">Deposit Funds</button>
+            </div>
+          </div> -->
+
+                  <!-- Recent Transactions Preview -->
+                  <div class="card transactions-preview">
+                    <h3>Transacciones recientes</h3>
+                    <div class="transactions-list">
+                      <div
+                        *ngFor="let tx of dashboardData.recentTransactions.slice(0, 3)"
+                        class="transaction-item"
+                      >
+                        <div class="tx-icon" [class]="getTransactionClass(tx.type)">
+                          {{ tx.type === 'buy' ? '⬇️' : '⬆️' }}
+                        </div>
+                        <div class="tx-details">
+                          <span class="tx-type">{{ tx.type | titlecase }} {{ tx.asset }}</span>
+                          <span class="tx-date">{{ formatDate(tx.date) }}</span>
+                        </div>
+                        <div class="tx-amount" [class]="getTransactionClass(tx.type)">
+                          {{ tx.type === 'buy' ? '-' : '+' }}{{ formatPrice(tx.value) }}
+                        </div>
+                      </div>
+                    </div>
+                    <button class="view-all-btn" (click)="changeSection('transactions')">
+                      Ver todas las transacciones
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Portfolio Section -->
+              <div *ngIf="activeSection === 'portfolio'" class="tab-content">
+                <div class="portfolio-header">
+                  <h2>Mi Portafolio</h2>
+                  <span class="portfolio-total">{{
+                    formatPrice(portfolioSummary.totalValue)
+                  }}</span>
+                </div>
+
+                <div class="assets-table">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Activo</th>
+                        <th>Precio</th>
+                        <th>Holdings</th>
+                        <th>Valor</th>
+                        <th>Diferencia 24h</th>
+                        <th>Asignación</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let asset of dashboardData.assets" class="asset-row">
+                        <td class="asset-info">
+                          <img [src]="asset.image" [alt]="asset.name" class="asset-icon" />
+                          <div class="asset-details">
+                            <span class="asset-name">{{ asset.name }}</span>
+                            <span class="asset-symbol">{{ asset.symbol.toUpperCase() }}</span>
+                          </div>
+                        </td>
+                        <td class="asset-price">{{ formatPrice(asset.currentPrice) }}</td>
+                        <td class="asset-amount">
+                          {{ asset.amount }} {{ asset.symbol.toUpperCase() }}
+                        </td>
+                        <td class="asset-value">{{ formatPrice(asset.value) }}</td>
+                        <td [class]="'asset-change ' + getChangeClass(asset.change24h)">
+                          {{ formatPercentage(asset.change24h) }}
+                        </td>
+                        <td class="asset-allocation">
+                          <div class="allocation-bar">
+                            <div class="allocation-fill" [style.width.%]="asset.allocation"></div>
+                            <span class="allocation-text">{{ asset.allocation.toFixed(1) }}%</span>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Market Section -->
+              <div *ngIf="activeSection === 'market'" class="tab-content">
+                <h2>Market Overview</h2>
+                <p class="market-description">Global cryptocurrency market data and trends</p>
+
+                <div class="market-cards">
+                  <div class="market-stat-card">
+                    <h4>Total Market Cap</h4>
+                    <p class="stat-value">
+                      {{ formatPrice(dashboardData.marketOverview.totalMarketCap) }}
+                    </p>
+                    <span
+                      [class]="
+                        'stat-change ' +
+                        getChangeClass(dashboardData.marketOverview.marketCapChange)
+                      "
+                    >
+                      {{ formatPercentage(dashboardData.marketOverview.marketCapChange) }}
+                    </span>
+                  </div>
+
+                  <div class="market-stat-card">
+                    <h4>24h Trading Volume</h4>
+                    <p class="stat-value">
+                      {{ formatPrice(dashboardData.marketOverview.totalVolume) }}
+                    </p>
+                    <span class="stat-change">Global</span>
+                  </div>
+
+                  <div class="market-stat-card">
+                    <h4>Bitcoin Dominance</h4>
+                    <p class="stat-value">
+                      {{ dashboardData.marketOverview.bitcoinDominance.toFixed(2) }}%
+                    </p>
+                    <span class="stat-change">Market Share</span>
+                  </div>
+
+                  <div class="market-stat-card">
+                    <h4>Active Cryptocurrencies</h4>
+                    <p class="stat-value">12,000+</p>
+                    <span class="stat-change">Growing</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Transactions Section -->
+              <div *ngIf="activeSection === 'transacciones'" class="tab-content">
+                <h2>Historial de transacciones</h2>
+
+                <div class="transactions-table">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Type</th>
+                        <th>Asset</th>
+                        <th>Amount</th>
+                        <th>Price</th>
+                        <th>Total Value</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        *ngFor="let tx of dashboardData.recentTransactions"
+                        class="transaction-row"
+                      >
+                        <td>
+                          <span [class]="'tx-type-badge ' + getTransactionClass(tx.type)">
+                            {{ tx.type | titlecase }}
+                          </span>
+                        </td>
+                        <td class="tx-asset">{{ tx.asset }}</td>
+                        <td class="tx-amount">{{ tx.amount }}</td>
+                        <td class="tx-price">{{ formatPrice(tx.price) }}</td>
+                        <td class="tx-value">{{ formatPrice(tx.value) }}</td>
+                        <td class="tx-date">{{ formatDate(tx.date) }}</td>
+                        <td>
+                          <span [class]="'status-badge ' + getStatusClass(tx.status)">
+                            {{ tx.status | titlecase }}
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+    <div class="col-lg-4 col-sm-12">
+      @if (loading){
+
+      <p>Loading...</p>
+      }
+      <!-- <mat-spinner></mat-spinner> -->
+      <div class="row">
+        <div class="col-12 text-center dashboard-header">
+          <h3>Criptomonedas</h3>
+        </div>
+        <div class="col-12 text-center">
+          <mat-form-field>
+            <mat-label>Filter</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Buscar" #input />
+          </mat-form-field>
+
+          <div class="mat-elevation-z8">
+            <table mat-table [dataSource]="dataSource" matSort>
+              <!-- 'baseAsset', 'quoteAsset', 'symbol', 'status' -->
+
+              <!-- imagen -->
+              <ng-container matColumnDef="image">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Logo</th>
+                <td mat-cell *matCellDef="let row">
+                  @if (row.image != null) {
+                  <img
+                    matListItemAvatar
+                    src="{{ row.image }}"
+                    class="table-image py-1"
+                    alt="Avatar"
+                  />
+                  } @else{
+                  <img
+                    matListItemAvatar
+                    src="https://www.rina.cl/images/no-photo.jpg"
+                    class="rounded-circle table-image"
+                    alt="Avatar"
+                  />
+                  }
+                </td>
+              </ng-container>
+              current_price market_cap_change_percentage_24h
+              <!-- symbol Column -->
+              <ng-container matColumnDef="symbol">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+                <td mat-cell *matCellDef="let row">
+                  <b>{{ row.symbol | uppercase }} </b>
+                  <!-- {{ ' - ' + row.name }} -->
+                </td>
+              </ng-container>
+
+              <!-- current_price Column -->
+              <ng-container matColumnDef="current_price">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Precio</th>
+                <td mat-cell *matCellDef="let row">{{ row.current_price }}</td>
+              </ng-container>
+
+              <!-- market_cap_change_percentage_24h Column -->
+              <ng-container matColumnDef="market_cap_change_percentage_24h">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Diferencia</th>
+                <td mat-cell *matCellDef="let row">{{ row.market_cap_change_percentage_24h }}</td>
+              </ng-container>
+
+              <!-- status Column -->
+              <!-- <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+          <td mat-cell *matCellDef="let row">{{ row.status }}</td>
+        </ng-container> -->
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr
+                mat-row
+                (click)="onRowClick(row)"
+                *matRowDef="let row; columns: displayedColumns"
+              ></tr>
+
+              <!-- Row shown when there is no matching data. -->
+              <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="4">
+                  No hay registros que coincidan con "{{ input.value }}"
+                </td>
+              </tr>
+            </table>
+
+            <mat-paginator
+              [pageSizeOptions]="[10, 25, 100]"
+              [pageSize]="25"
+              aria-label="Select page of users"
+            ></mat-paginator>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div *ngIf="loading">Loading...</div>
+
+<div *ngIf="cryptos.length > 0">
+  <h2>Available Cryptocurrencies ({{ cryptos.length }})</h2>
+  <select (change)="onCryptoSelect($event)">
+    <option value="">Select a cryptocurrency</option>
+    <option *ngFor="let crypto of cryptos" [value]="crypto.symbol">
+      {{ crypto.baseAsset }}/{{ crypto.quoteAsset }}
+    </option>
+  </select>
+</div>
+
+<div *ngIf="selectedCrypto">
+  <h3>Details for {{ selectedCrypto?.symbol || 'N/A' }}</h3>
+  <p>Price: ${{ selectedCrypto?.lastPrice }}</p>
+  <p>24h Change: {{ selectedCrypto?.priceChangePercent }}%</p>
+  <p>Volume: {{ selectedCrypto?.volume }} {{ selectedCrypto?.symbol?.replace('USDT', '') }}</p>
+</div>
+
+<div *ngIf="historicalData.length > 0">
+  <h4>Historical Data (Last 7 days)</h4>
+  <table>
+    <tr>
+      <th>Date</th>
+      <th>Open</th>
+      <th>High</th>
+      <th>Low</th>
+      <th>Close</th>
+      <th>Volume</th>
+    </tr>
+    <tr *ngFor="let data of historicalData">
+      <td>{{ data.openTime | date }}</td>
+      <td>{{ data.open }}</td>
+      <td>{{ data.high }}</td>
+      <td>{{ data.low }}</td>
+      <td>{{ data.close }}</td>
+      <td>{{ data.volume }}</td>
+    </tr>
+  </table>
+</div> -->
+</div>

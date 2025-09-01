@@ -1,24 +1,30 @@
 import { Routes } from '@angular/router';
-import { Consultar } from './pages/consultar/consultar';
 import { Intercambiar } from './pages/intercambiar/intercambiar';
-// import { AdminDashboardLayoutComponent } from './layouts/admin-dashboard-layout/admin-dashboard-layout.component';
-// import { ProductAdminPageComponent } from './pages/product-admin-page/product-admin-page.component';
-// import { ProductsAdminPageComponent } from './pages/products-admin-page/products-admin-page.component';
-// import { IsAdminGuard } from '@auth/guards/is-admin.guard';
+import { Main } from './pages/main/main';
+import { Consultar } from './pages/consultar/consultar';
 
 export const criptomonedasRoutes: Routes = [
   {
     path: '',
-    component: Consultar,
+    component: Main,
   },
   {
     path: '',
     component: Intercambiar,
   },
+
+  // {
+  //   path: 'intercambio',
+  //   component: ProductsAdminPageComponent,
+  // },
   {
-        path: '**',
-        redirectTo: '',
-      },
+    path: 'consultar/:id',
+    component: Consultar,
+  },
+  {
+    path: '**',
+    redirectTo: '',
+  },
 ];
 
 export default criptomonedasRoutes;

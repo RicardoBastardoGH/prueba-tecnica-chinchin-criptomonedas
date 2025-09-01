@@ -1,1 +1,206 @@
-<p>consultar works!</p>
+<div class="crypto-detail-container">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading">
+    <div class="spinner"></div>
+    <p>Loading cryptocurrency data...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !loading" class="error">
+    <p>Error: {{ error }}</p>
+    <button (click)="loadCryptoDetail()" class="retry-btn">Try Again</button>
+    <button (click)="goBack()" class="back-btn">Atras</button>
+  </div>
+
+  <!-- Main Content -->
+  <div *ngIf="cryptoDetail && !loading" class="crypto-content">
+    <!-- Header -->
+    <div class="crypto-header">
+      <button (click)="goBack()" class="back-btn">← Atras</button>
+      <div class="crypto-title">
+        <img [src]="cryptoDetail.image.large" [alt]="cryptoDetail.name" class="crypto-icon-large" />
+        <div>
+          <h1>{{ cryptoDetail.name }}</h1>
+          <span class="symbol">{{ cryptoDetail.symbol.toUpperCase() }}</span>
+        </div>
+      </div>
+      <div class="price-display">
+        <h2 class="current-price">
+          {{ formatPrice(cryptoDetail.market_data.current_price['usd']) }}
+        </h2>
+        <span
+          [class]="
+            'price-change ' +
+            getPriceChangeClass(cryptoDetail.market_data.price_change_percentage_24h)
+          "
+        >
+          {{ formatPercentage(cryptoDetail.market_data.price_change_percentage_24h) }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="tabs">
+      <button
+        *ngFor="let tab of ['gráficos', 'descripción general', 'reseña']"
+        [class.active]="activeTab === tab"
+        (click)="changeTab(tab)"
+        class="tab-btn"
+      >
+        {{ tab | titlecase }}
+      </button>
+    </div>
+
+    <!-- gráficos Tab -->
+    <div *ngIf="activeTab === 'gráficos'" class="tab-content">
+      <div class="chart-controls">
+        <div class="time-buttons">
+          <button
+            *ngFor="let days of [1, 7, 30, 90, 365]"
+            [class.active]="chartDays === days"
+            (click)="changeTimeRange(days)"
+            class="time-btn"
+          >
+            {{ days === 1 ? '24H' : days + 'D' }}
+          </button>
+        </div>
+        <div class="chart-type-buttons">
+          <button
+            [class.active]="chartType === 'price'"
+            (click)="changeChartType('price')"
+            class="chart-type-btn"
+          >
+            Precio
+          </button>
+          <button
+            [class.active]="chartType === 'volume'"
+            (click)="changeChartType('volume')"
+            class="chart-type-btn"
+          >
+            Volumen
+          </button>
+        </div>
+      </div>
+
+      <div class="chart-container">
+        <canvas
+          baseChart
+          [datasets]="chartData"
+          [labels]="chartLabels"
+          [options]="chartOptions"
+          [type]="chartTypeConfig"
+        >
+        </canvas>
+
+        <!-- Loading State for Chart -->
+        <div *ngIf="chartData.length === 0" class="chart-loading">
+          <div class="spinner small"></div>
+          <p>Cargando gráficos...</p>
+        </div>
+      </div>
+    </div>
+    <!-- descripción general Tab -->
+    <div *ngIf="activeTab === 'descripción general'" class="tab-content">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h3>Capitalización de mercado</h3>
+          <p class="stat-value">{{ formatPrice(cryptoDetail.market_data.market_cap['usd']) }}</p>
+        </div>
+        <div class="stat-card">
+          <h3>Volumen de 24 horas</h3>
+          <p class="stat-value">{{ formatPrice(cryptoDetail.market_data.total_volume['usd']) }}</p>
+        </div>
+        <div class="stat-card">
+          <h3>Oferta circulante</h3>
+          <p class="stat-value">
+            {{ formatNumber(cryptoDetail.market_data.circulating_supply) }}
+            {{ cryptoDetail.symbol.toUpperCase() }}
+          </p>
+        </div>
+        <div class="stat-card">
+          <h3>Total Supply</h3>
+          <p class="stat-value">
+            {{
+              cryptoDetail.market_data.total_supply
+                ? formatNumber(cryptoDetail.market_data.total_supply)
+                : 'N/A'
+            }}
+          </p>
+        </div>
+        <div class="stat-card">
+          <h3>24h High</h3>
+          <p class="stat-value">{{ formatPrice(cryptoDetail.market_data.high_24h['usd']) }}</p>
+        </div>
+        <div class="stat-card">
+          <h3>24h Low</h3>
+          <p class="stat-value">{{ formatPrice(cryptoDetail.market_data.low_24h['usd']) }}</p>
+        </div>
+      </div>
+
+      <div class="performance-cards">
+        <div class="performance-card">
+          <h5>Rendimiento 24h</h5>
+          <span [class]="getPriceChangeClass(cryptoDetail.market_data.price_change_percentage_24h)">
+            {{ formatPercentage(cryptoDetail.market_data.price_change_percentage_24h) }}
+          </span>
+        </div>
+        <div class="performance-card">
+          <h5>Rendimiento 7d</h5>
+          <span [class]="getPriceChangeClass(cryptoDetail.market_data.price_change_percentage_7d)">
+            {{ formatPercentage(cryptoDetail.market_data.price_change_percentage_7d) }}
+          </span>
+        </div>
+        <div class="performance-card">
+          <h5>Rendimiento 30d</h5>
+          <span [class]="getPriceChangeClass(cryptoDetail.market_data.price_change_percentage_30d)">
+            {{ formatPercentage(cryptoDetail.market_data.price_change_percentage_30d) }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- reseña Tab -->
+    <div *ngIf="activeTab === 'reseña'" class="tab-content">
+      <div class="about-content">
+        <h3>Acerca de {{ cryptoDetail.name }}</h3>
+        <!-- <div class="description" [innerHTML]="cryptoDetail.description.en | sanitizeHtml"></div> -->
+        <div class="description" [innerHTML]="cryptoDetail.description.en"></div>
+
+        <div class="links-section" *ngIf="cryptoDetail.links">
+          <h4>Enlaces</h4>
+          <div class="links-grid">
+            <a
+              *ngFor="let link of cryptoDetail.links.homepage"
+              [href]="link"
+              target="_blank"
+              class="link-item"
+            >
+              🌐 Sitio Web Oficial
+            </a>
+            <a
+              *ngIf="cryptoDetail.links.subreddit_url"
+              [href]="cryptoDetail.links.subreddit_url"
+              target="_blank"
+              class="link-item"
+            >
+              📌 Reddit
+            </a>
+          </div>
+        </div>
+
+        <div class="metadata">
+          <p *ngIf="cryptoDetail.genesis_date">
+            <strong>Fecha de lanzamiento:</strong> {{ cryptoDetail.genesis_date }}
+          </p>
+          <p>
+            <strong>Sentimiento Colectivo:</strong>
+            <span class="sentiment-up">↑ {{ cryptoDetail.sentiment_votes_up_percentage }}%</span>
+            <span class="sentiment-down"
+              >↓ {{ cryptoDetail.sentiment_votes_down_percentage }}%</span
+            >
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

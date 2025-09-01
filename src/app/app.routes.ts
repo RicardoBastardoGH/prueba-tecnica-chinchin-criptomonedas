@@ -1,16 +1,10 @@
 import { Routes } from '@angular/router';
+import { AuthGuard } from './auth/guards/auth.guard';
 
 export const routes: Routes = [
   {
     path: 'auth',
     loadChildren: () => import('./auth/auth.routes'),
-    // canMatch: [
-    //   // () => {
-    //   //   console.log('hola Mundo');
-    //   //   return true;
-    //   // },
-    //   NotAuthenticatedGuard,
-    // ],
   },
 
   // {
@@ -18,7 +12,12 @@ export const routes: Routes = [
   //   loadChildren: () => import('./admin-dashboard/admin-dashboard.routes'),
   // },
   {
-    path: '',
+    path: 'home',
     loadChildren: () => import('./home/home.routes'),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: '**',
+    redirectTo: 'home',
   },
 ];
