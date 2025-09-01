@@ -113,8 +113,7 @@ export class Main implements OnInit {
     this.subscription = source.subscribe((val) => {
       console.log('testing interval');
       // this.loadCryptocurrencies();
-      // TODO loadCryptocurrenciesGreko
-      // this.loadCryptocurrenciesGreko();
+      this.loadCryptocurrenciesGreko();
     });
   }
 

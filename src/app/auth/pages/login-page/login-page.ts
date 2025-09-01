@@ -7,7 +7,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Footer } from '../../../shared/components/footer/footer';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../services/auth.service';
 
@@ -21,7 +20,6 @@ import { AuthService } from '../../services/auth.service';
     MatIconModule,
     CommonModule,
     ReactiveFormsModule,
-    Footer,
   ],
   templateUrl: './login-page.html',
   styles: ``,
